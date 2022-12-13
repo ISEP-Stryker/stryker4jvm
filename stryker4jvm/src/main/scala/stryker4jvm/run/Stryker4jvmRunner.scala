@@ -10,24 +10,17 @@ import stryker4jvm.core.logging.Logger
 import stryker4jvm.files.{ConfigFilesResolver, FilesFileResolver, GlobFileResolver, MutatesFileResolver}
 import stryker4jvm.logging.SttpLogWrapper
 import stryker4jvm.model.CompilerErrMsg
-import stryker4jvm.mutants.Mutator
-import stryker4jvm.mutator.scala.mutants.tree.{InstrumenterOptions, MutantCollector, MutantInstrumenter}
-import stryker4jvm.reporting.dashboard.DashboardConfigProvider
+import stryker4jvm.mutants.{Mutator, SupportedLanguageMutators}
+import stryker4jvm.mutator.scala.mutants.tree.InstrumenterOptions
 import stryker4jvm.reporting.*
-import stryker4jvm.reporting.reporters.{
-  AggregateReporter,
-  ConsoleReporter,
-  DashboardReporter,
-  HtmlReporter,
-  JsonReporter
-}
+import stryker4jvm.reporting.dashboard.DashboardConfigProvider
+import stryker4jvm.reporting.reporters.*
 import stryker4jvm.run.process.ProcessRunner
 import stryker4jvm.run.threshold.ScoreStatus
 import sttp.client3.SttpBackend
 import sttp.client3.httpclient.fs2.HttpClientFs2Backend
 import sttp.client3.logging.LoggingBackend
 import sttp.model.HeaderNames
-import stryker4jvm.mutants.SupportedLanguageMutators
 
 abstract class Stryker4jvmRunner(implicit log: Logger) {
   def run(): IO[ScoreStatus] = {
