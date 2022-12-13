@@ -11,7 +11,9 @@ object SupportedLanguageMutators {
     SupportedMutator("kotlin", "kt", new KotlinMutator())
   )
 
-  def languageRouter: Map[String, LanguageMutator[? <: AST]] = supportedMutators.map(mutator => (mutator.extension -> mutator.languageMutator)).toMap
+  def languageRouter: Map[String, LanguageMutator[? <: AST]] =
+    supportedMutators.map(mutator => mutator.extension -> mutator.languageMutator).toMap
 
-  def mutatesFileSources: Seq[String] = supportedMutators.map(mutator => s"**/main/${mutator.directory}/**.${mutator.extension}")
+  def mutatesFileSources: Seq[String] =
+    supportedMutators.map(mutator => s"**/main/${mutator.directory}/**.${mutator.extension}")
 }
