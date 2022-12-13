@@ -27,6 +27,7 @@ import sttp.client3.SttpBackend
 import sttp.client3.httpclient.fs2.HttpClientFs2Backend
 import sttp.client3.logging.LoggingBackend
 import sttp.model.HeaderNames
+import stryker4jvm.mutants.SupportedLanguageMutators
 
 abstract class Stryker4jvmRunner(implicit log: Logger) {
   def run(): IO[ScoreStatus] = {
@@ -39,10 +40,7 @@ abstract class Stryker4jvmRunner(implicit log: Logger) {
     val stryker4jvm = new Stryker4jvm(
       resolveMutatesFileSource,
       new Mutator(
-        Map.empty
-//        new MutantFinder(),
-//        new MutantCollector(new TraverserImpl(), new MutantMatcherImpl()),
-//        new MutantInstrumenter(instrumenterOptions)
+        SupportedLanguageMutators.languageRouter
       ),
       new MutantRunner(createTestRunnerPool, resolveFilesFileSource, new RollbackHandler(), reporter),
       reporter
@@ -90,7 +88,7 @@ abstract class Stryker4jvmRunner(implicit log: Logger) {
   def resolveMutatesFileSource(implicit config: Config): MutatesFileResolver =
     new GlobFileResolver(
       config.baseDir,
-      if (config.mutate.nonEmpty) config.mutate else Seq("**/main/scala/**.scala")
+      if (config.mutate.nonEmpty) config.mutate else SupportedLanguageMutators.mutatesFileSources
     )
 
   def resolveFilesFileSource(implicit config: Config): FilesFileResolver = new ConfigFilesResolver(ProcessRunner())
