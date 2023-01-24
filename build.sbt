@@ -33,7 +33,7 @@ lazy val root = (project withId "stryker4jvm-root" in file("."))
   .aggregate(
     (stryker4jvm.projectRefs ++
       stryker4jvmMutatorScala.projectRefs ++
-      stryker4sCore.projectRefs ++
+//      stryker4sCore.projectRefs ++
       stryker4jvmCommandRunner.projectRefs ++
       sbtStryker4jvm.projectRefs ++
       stryker4jvmApi.projectRefs ++
