@@ -36,7 +36,8 @@ lazy val root = (project withId "stryker4jvm-root" in file("."))
       stryker4jvmCommandRunner.projectRefs ++
       sbtStryker4jvm.projectRefs ++
       stryker4jvmApi.projectRefs ++
-      sbtTestRunner.projectRefs)*
+      sbtTestRunner.projectRefs ++
+      strykerAggregate.projectRefs)*
   )
 
 lazy val stryker4jvmCommandRunner = newProject("stryker4jvm-command-runner", "stryker4jvm-command-runner")
@@ -88,6 +89,18 @@ lazy val stryker4jvmMutatorScala = newProject("stryker4jvm-mutator-scala", "stry
     )
   )
   .jvmPlatform(scalaVersions = versions.crossScalaVersions)
+
+lazy val strykerAggregate = newProject("stryker-aggregate", "stryker-aggregate")
+  .enablePlugins(SbtPlugin)
+  .settings(
+    libraryDependencies ++= Seq(
+    "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.13.2",
+    "io.stryker-mutator" %% "stryker4s-core" % "0.14.3"
+    )
+  )
+  .jvmPlatform(scalaVersions = Seq(versions.scala212))
+
+
 
 def newProject(projectName: String, dir: String) =
   sbt.internal

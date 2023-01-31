@@ -1,3 +1,5 @@
+resolvers += Resolver.mavenLocal
+
 addSbtPlugin("com.github.sbt" % "sbt-ci-release" % "1.5.11")
 addSbtPlugin("io.stryker-mutator" % "sbt-stryker4s" % "0.14.3")
 addSbtPlugin("io.github.davidgregory084" % "sbt-tpolecat" % "0.4.1")
@@ -9,3 +11,5 @@ libraryDependencies += "com.thesamet.scalapb" %% "compilerplugin" % "0.11.11"
 
 // Coverage
 addSbtPlugin("org.scoverage" % "sbt-scoverage" % "2.0.6")
+
+addSbtPlugin("io.stryker-mutator" % "stryker-aggregate" % "0.0.0-TEST-SNAPSHOT")
