@@ -45,9 +45,9 @@ class Mutator(
     result
   }
   def go(files: Stream[IO, Path]): IO[(MutantResultsPerFile, Seq[MutatedFile])] = {
-      // Parse and mutate files
-      time {
-        files
+    // Parse and mutate files
+    time {
+      files
         .parEvalMap(config.concurrency) { path =>
           val mutatorOption = mutantRouter.get(path.extName)
           mutatorOption match {
@@ -65,27 +65,25 @@ class Mutator(
             case None => IO.raiseError(InvalidFileTypeException(path))
           }
         }
-          // Give each mutation a unique id
-          .through(updateWithId())
-          // Split mutations into active and ignored mutations
-          .flatMap { case (ctx, collectedWithId) =>
-            splitIgnoredAndFound(ctx, collectedWithId.mutantResults, collectedWithId.mutations)
-          }
-          // Instrument files
-          .parEvalMapUnordered(config.concurrency)(_.traverse { case (context, mutations) =>
-            val mutator = mutantRouter(context.path.extName)
-            val instrumented = mutator.instrument(context.source, mutations)
-            val mutants = mutations.asScala.values.map(_.asScala.toVector).toVector.flatten
-            val mutatedFile = MutatedFile(context.path, instrumented, mutants)
-            IO(log.debug(s"Instrumenting mutations in ${mutations.size} places in ${context.path}")) *>
-              IO(mutatedFile)
-          })
-          // Fold into 2 separate lists of ignored and found mutants (in files)
-          .through(foldAndSplitEithers)
-          .evalTap { case (ignored, files) => logMutationResult(ignored, files) }
-      }
-      .compile
-      .lastOrError
+        // Give each mutation a unique id
+        .through(updateWithId())
+        // Split mutations into active and ignored mutations
+        .flatMap { case (ctx, collectedWithId) =>
+          splitIgnoredAndFound(ctx, collectedWithId.mutantResults, collectedWithId.mutations)
+        }
+        // Instrument files
+        .parEvalMapUnordered(config.concurrency)(_.traverse { case (context, mutations) =>
+          val mutator = mutantRouter(context.path.extName)
+          val instrumented = mutator.instrument(context.source, mutations)
+          val mutants = mutations.asScala.values.map(_.asScala.toVector).toVector.flatten
+          val mutatedFile = MutatedFile(context.path, instrumented, mutants)
+          IO(log.debug(s"Instrumenting mutations in ${mutations.size} places in ${context.path}")) *>
+            IO(mutatedFile)
+        })
+        // Fold into 2 separate lists of ignored and found mutants (in files)
+        .through(foldAndSplitEithers)
+        .evalTap { case (ignored, files) => logMutationResult(ignored, files) }
+    }.compile.lastOrError
   }
 
   private def updateWithId()
