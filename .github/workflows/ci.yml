@@ -56,7 +56,7 @@ jobs:
             clean build
             publishToMavenLocal
       - name: Run scripted test
-        run: sbt 'stryker4jvm2_12/publishLocal; stryker4jvm-mutator-scala2_12/publishLocal; stryker4jvm-api2_12/publishLocal; stryker4jvm-plugin-sbt-testrunner2_12/publishLocal; scripted sbt-stryker4s/test-1'
+        run: sbt 'stryker4jvm2_12/publishLocal; stryker4jvm-mutator-scala2_12/publishLocal; stryker4jvm-api2_12/publishLocal; stryker4jvm-plugin-sbt-testrunner2_12/publishLocal; scripted sbt-stryker4jvm/test-1'
 
   maven-plugin:
     name: Test Maven plugin
