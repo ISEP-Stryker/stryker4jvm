@@ -17,7 +17,7 @@ object Release {
   lazy val releaseCommands: Setting[Seq[Command]] = commands ++= Seq(
     // Called by sbt-ci-release
     Command.command(stryker4jvmPublishSigned)(
-      sonatypePrepare :: crossPublishSigned  :: stryker4jvmMvnDeploy :: _
+      sonatypePrepare :: crossPublishSigned :: stryker4jvmMvnDeploy :: _
     ),
     // Called by stryker4jvmPublish(signed)
     Command.command(stryker4jvmMvnDeploy)(mvnDeploy(baseDirectory.value, version.value)),
