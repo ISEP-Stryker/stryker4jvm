@@ -68,7 +68,6 @@ jobs:
         with:
           distribution: 'corretto'
           java-version: 15
-          cache: 'maven'
       - name: Cleanup M2
         run: rm -rf ~/.m2/repository/io/stryker-mutator/*/SET-BY-SBT-SNAPSHOT/
       - name: Build core with Maven
